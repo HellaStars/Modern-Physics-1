@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Sep 12 15:44:12 2026
+
+@author: Stars 
+@email: lwalorsc@msudenver.edu
+"""
+
+import numpy as np
+import matplotlib.pyplot as mp
+
+h = 6.626e-34
+c = 3e8
+kb = 1.38e-23 
+T=1500
+
+def intensity(w,T):
+    return ((2* h*(c**2)/w**5)/(np.exp((h * c) / (w * kb * T)) - 1))
+        
+w = np.linspace(100e-9, 10000e-9, 100000)
+I = intensity(w, T)
+mp.plot(w, I)
+wV = np.linspace(400e-9, 700e-9, 100000)
+Iv = intensity(wV,T)
+mp.fill_between(wV, Iv, color='purple', alpha=0.3)
+At = np.trapezoid(I, w)
+Ap = np.trapezoid(Iv,wV)
+A = (Ap / At)
+mp.xlabel("Wavelength (m)")
+mp.ylabel("Intensity")
+
+mp.text(0.0000007, 1, f"<-Visible Light Energy:{A*100:.4f}% of total Energy")
+
+mp.show()
